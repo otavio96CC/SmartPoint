@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+	<html lang="pt-br">
+		<head>
+			<meta charset="utf-8"/>
+			<title>SmartPoint</title>
+		</head>
+	<body>
+
+        <h1>Endereço</h1>
+		<br/>
+
+		<% for(let i=0; i < endereco.length; i++) { %>
+			<tr>
+				<td><% = endereco[i].id_endereco</td>
+				<td><% = endereco[i].rua_endereco</td>
+				<td><% = endereco[i].quadra_lote_endereco</td>
+				<td><% = endereco[i].numero_endereco</td>
+				<td><% = endereco[i].bairro_endereco</td>
+				<td><% = endereco[i].logradouro_endereco</td>
+				<td><% = endereco[i].cep_endereco</td>
+				<td><% = endereco[i].cidade_endereco</td>
+			</tr>
+		<% } %>
+
+	</body>
+</html>
