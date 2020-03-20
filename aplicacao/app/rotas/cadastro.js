@@ -1,28 +1,51 @@
-// definir rotas ainda
-var uuid = require('uuid');
-
 module.exports = function(aplicacao){
 
-    aplicacao.get('/endereco', function(request, response){
-        let conexao = aplicacao.config.dbConexao()
-        let cadastro = aplicacao.app.modelos.enderecoModel
+    aplicacao.get('/endereco', (request, response, next)=>{
 
-        cadastro.getEndereco(conexao, (error, result)=>{
-            response.send({enderecos : result})
-        })
-    })
+        let conexao = aplicacao.config.dbConexao();
+        let cadastro = aplicacao.app.modelos.cadastroFuncionarioModel;
 
-    aplicacao.post('/endereco', (request, response)=>{
-        let cadastroEndereco = request.body
-        let conexao = aplicacao.config.dbConexao()
-        let cadastro = aplicacao.app.modelos.enderecoModel
-        cadastroEndereco.id_endereco = uuid.v4();
+        return cadastro.getCadastro(conexao).then(success => {
+            return response.send({funcionarios: success});
+        }).catch(error => {
+            next({erro: error.sqlMessage});
+        });
+    });
+      
+    aplicacao.post('/endereco', (request, response, next)=>{
+        let cadastro = request.body;
 
-        cadastro.setEndereco(cadastroEndereco, conexao, (error, result)=>{
-           // cadastro.getEndereco(conexao, (error, result)=>{
-                response.send({enderecos : result})
-            //})	
-        })
-    })
+        let conexao = aplicacao.config.dbConexao();
+        let cadastrarFuncionario = aplicacao.app.modelos.cadastroFuncionarioModel;
+        
+        return cadastrarFuncionario.setCadastro(cadastro, conexao).then(success => {
+            return response.send({cadastros: success});
+        }).catch(error => {
+            next({erro : error.sqlMessage});
+        });
+    });
+
+    aplicacao.post('/empresaCreate',(request, response, next)=>{
+        let cadastro = request.body;
+
+        let conexao = aplicacao.config.dbConexao();
+        let cadastrarEmpresa = aplicacao.app.modelos.empresaModel;
+
+        return cadastrarEmpresa.setEmpresa(cadastro, conexao).then(success => {
+            return response.send({empresa: success});
+        }).catch(error => {
+            next({erro : error.sqlMessage});
+        });
+    });
+    aplicacao.get('/empresaRead', (request, response, next)=>{
+
+        let conexao = aplicacao.config.dbConexao();
+        let cadastro = aplicacao.app.modelos.empresaModel;
+
+        return cadastro.getEmpresa(conexao).then(success => {
+            return response.send({funcionarios: success});
+        }).catch(error => {
+            next({erro: error.sqlMessage});
+        });
+    });
 }
-

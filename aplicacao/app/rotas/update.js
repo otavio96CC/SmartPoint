@@ -1,17 +1,16 @@
 module.exports = function(aplicacao){
-    aplicacao.patch('/enderecoUpdate', (request, response)=>{
+    aplicacao.patch('/enderecoUpdate', (request, response, next)=>{
         let updateEndereco = request.body
         let conexao = aplicacao.config.dbConexao()
         let cadastro = aplicacao.app.modelos.enderecoModel
 
-        cadastro.updateEndereco(updateEndereco, conexao, (error, result)=>{
-            console.log(error)
-            if(result.affectedRows === 0 ){
-                response.send({message:'Endereço não existe'})
+        return cadastro.updateEndereco(updateEndereco, conexao).then(success => {
+            if(success.affectedRows === 0){
+                return response.send({message:'Cadastro inexistente!'});
             }
-            else{
-                response.send({enderecos : result})
-            }
+            return response.send({funcionario : success});
+        }).catch( error => {
+            next({erro: error.sqlMessage});
         })
     })
 }

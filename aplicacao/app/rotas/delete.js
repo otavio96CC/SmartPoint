@@ -1,17 +1,30 @@
 module.exports = function(aplicacao){
-    aplicacao.delete('/enderecoDelete', (request, response)=>{
-        let deleteEndereco = request.body
-        let conexao = aplicacao.config.dbConexao()
-        let cadastro = aplicacao.app.modelos.enderecoModel
+    aplicacao.delete('/enderecoDelete', (request, response, next)=>{
+        let deleteEndereco = request.body;
+        let conexao = aplicacao.config.dbConexao();
+        let cadastro = aplicacao.app.modelos.cadastroFuncionarioModel;
 
-        cadastro.deleteEndereco(deleteEndereco, conexao, (error, result)=>{
-            console.log(error)
-            if(result.affectedRows === 0 ){
-               response.send({message:'Endereço não existe'})
+        return cadastro.deleteFuncionario(deleteEndereco, conexao).then(success => {
+            if(success.affectedRows === 0){
+                return response.send({message:'Cadastro inexistente!'});
             }
-            else{
-                response.send({enderecos : result})
+            return response.send({funcionario : success});
+        }).catch( error => {
+            next({erro: error.sqlMessage});
+        });
+    });
+    aplicacao.delete('/empresaDelete',(request, response, next)=>{
+        let deleteEmpresa= request.body;
+        let conexao = aplicacao.config.dbConexao();
+        let cadastro = aplicacao.app.modelos.empresaModel;
+
+        return cadastro.deleteEmpresa(deleteEmpresa, conexao).then(success => {
+            if(success.affectedRows === 0){
+                return response.send({message:'Cadastro inexistente!'});
             }
-        })
-    })
+            return response.send({empresa: success});
+        }).catch(error => {
+            next({erro: error.sqlMessage});
+        });
+    });
 }
