@@ -82,7 +82,6 @@ module.exports = function(){
 				if(error){
 					return reject(error);
 				}
-				console.log(result);
 				return resolve(result);
 			});
 		});
@@ -153,6 +152,128 @@ module.exports = function(){
 					});
 				});
 			});
+		});
+	}
+	this.updateEmpresa = function(empresa, conexao){
+		let {id_empresa} = empresa;
+		let endereco = {};
+		let contemEndereco = Object.keys(empresa);
+		let testeEndereco = ['rua', 'quadraLote', 'numero', 'bairro', 'logradouro', 'cep', 'cidade'];
+		let keyEndereco = ['rua_endereco', 'quadra_lote_endereco', 'numero_endereco', 'bairro_endereco', 'logradouro_endereco', 'cep_endereco', 'cidade _endereco'];
+		for(let i = 0; i<contemEndereco.length; i++){
+			for(let k=0; k<testeEndereco.length; k++){
+				if(contemEndereco[i] == testeEndereco[k]){
+					endereco[keyEndereco[k]] = empresa[testeEndereco[k]];
+					delete empresa[testeEndereco[k]];
+				}
+			}
+		}
+		return new Promise((resolve, reject)=>{
+			if(Object.getOwnPropertyNames(endereco).length === 0){
+				conexao.query(`UPDATE empresas SET ? WHERE id_empresa = '${id_empresa}'`, empresa, (err, result)=>{
+					if (err) { 
+						conexao.end();	
+						return reject(err);
+					}
+				console.log('Transacao completa.');
+				return resolve(result);
+				}); 
+			}else if(Object.getOwnPropertyNames(empresa).length === 1){
+				conexao.beginTransaction(function(err) {
+					if (err) { 
+						return reject(err);
+					}
+					conexao.query(`SELECT * FROM endereco_empresas WHERE empresas_id_empresa = '${id_empresa}'`, (err, result)=>{
+						if (err) { 
+							conexao.rollback(function() {
+								conexao.end();
+								console.log('primeiro rollback');
+								return reject(err);
+							});
+							return reject(err);
+						}
+						
+						let enderecos_id_endereco = result[0].enderecos_id_endereco;
+						
+						conexao.query(`UPDATE enderecos SET ? WHERE id_endereco = '${enderecos_id_endereco}'`, endereco, (err, result)=>{
+							if (err) { 
+								conexao.rollback(function() {
+									conexao.end();
+									console.log('segundo rollback');
+									return reject(err);
+								});
+								return reject(err);
+							}
+							conexao.commit(function(err) {
+								if (err) { 
+									conexao.rollback(function() {
+										conexao.end();
+										console.log('terceiro rollback');
+										return reject(err);
+									});
+									return reject(err);
+								}
+							console.log('Transacao completa.');
+							//conexao.end();
+							return resolve(result);
+							});
+						});
+							
+					});
+				});
+			}else{
+				conexao.beginTransaction(function(err) {
+					if (err) { 
+						return reject(err);
+					}
+					conexao.query(`SELECT * FROM endereco_empresas WHERE empresas_id_empresa = '${id_empresa}'`, (err, result)=>{
+						if (err) { 
+							conexao.rollback(function() {
+								conexao.end();
+								console.log('primeiro rollback');
+								return reject(err);
+							});
+							return reject(err);
+						}
+						
+						let enderecos_id_endereco = result[0].enderecos_id_endereco;
+
+						conexao.query(`UPDATE enderecos SET ? WHERE id_endereco = '${enderecos_id_endereco}'`, endereco, (err, result)=>{
+							if (err) { 
+								conexao.rollback(function() {
+									conexao.end();
+									console.log('segundo rollback');
+									return reject(err);
+								});
+								return reject(err);
+							}
+							conexao.query(`UPDATE empresas SET ? WHERE id_empresa = '${id_empresa}'`, empresa, (err, result)=>{
+								if (err) { 
+									conexao.rollback(function() {
+										conexao.end();
+										console.log('terceiro rollback');
+										return reject(err);
+									});
+									return reject(err);
+								}
+								conexao.commit(function(err) {
+									if (err) { 
+										conexao.rollback(function() {
+											conexao.end();
+											console.log('quarto rollback');
+											return reject(err);
+										});
+										return reject(err);
+									}
+								console.log('Transacao completa.');
+								//conexao.end();
+								return resolve(result);
+								});
+							});
+						});
+					});
+				});
+			}
 		});
 	}
     return this;
