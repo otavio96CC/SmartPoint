@@ -2,7 +2,7 @@ module.exports = function(aplicacao){
     aplicacao.delete('/cadastroDelete', (request, response, next)=>{
         let deleteEndereco = request.body;
         let conexao = aplicacao.config.dbConexao();
-        let cadastro = aplicacao.app.modelos.cadastroFuncionarioModel;
+        let cadastro = aplicacao.app.modelos.funcionarioModel;
 
         return cadastro.deleteFuncionario(deleteEndereco, conexao).then(success => {
             if(success.affectedRows === 0){

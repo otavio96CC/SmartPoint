@@ -3,7 +3,7 @@ module.exports = function(aplicacao){
     aplicacao.get('/endereco', (request, response, next)=>{
 
         let conexao = aplicacao.config.dbConexao();
-        let cadastro = aplicacao.app.modelos.cadastroFuncionarioModel;
+        let cadastro = aplicacao.app.modelos.funcionarioModel;
 
         return cadastro.getCadastro(conexao).then(success => {
             return response.send({funcionarios: success});
@@ -16,7 +16,7 @@ module.exports = function(aplicacao){
         let cadastro = request.body;
 
         let conexao = aplicacao.config.dbConexao();
-        let cadastrarFuncionario = aplicacao.app.modelos.cadastroFuncionarioModel;
+        let cadastrarFuncionario = aplicacao.app.modelos.funcionarioModel;
         
         return cadastrarFuncionario.setCadastro(cadastro, conexao).then(success => {
             return response.send({cadastros: success});

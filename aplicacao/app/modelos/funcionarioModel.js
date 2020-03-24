@@ -67,7 +67,7 @@ module.exports = function(){
 			});
 		});
 	}
-	this.updateEndereco = function(funcionario, conexao){
+	this.updateFuncionario = function(funcionario, conexao){
 		let {id_funcionario} = funcionario;
 		let endereco = {};
 		let contemEndereco = Object.keys(funcionario);
@@ -258,6 +258,24 @@ module.exports = function(){
 					return reject(error);
 				}
 				return resolve(result);
+			});
+		});
+	}
+	this.login = function(login, conexao){
+		return new Promise((resolve, reject)=>{
+			conexao.query(`SELECT * FROM funcionarios WHERE matricula_funcionario = '${login.matricula}'`, (error,result)=> {
+				if(error){
+					return reject(error);
+				}
+				if(result.length === 0 || result[0].senha_funcionario != login.senha){
+					result = {
+						mensagem: 'Matricula ou senha invadlida!',
+						code: 401
+					}
+					return reject(result);
+				}
+				result.mensagem = 'Logado com sucesso!'
+				return resolve(result);		
 			});
 		});
 	}

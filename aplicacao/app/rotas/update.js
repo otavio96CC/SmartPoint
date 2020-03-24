@@ -3,9 +3,9 @@ module.exports = function(aplicacao){
     aplicacao.patch('/cadastroUpdade', (request, response, next)=>{
         let updateCadastro = request.body;
         let conexao = aplicacao.config.dbConexao();
-        let cadastro = aplicacao.app.modelos.cadastroFuncionarioModel;
+        let cadastro = aplicacao.app.modelos.funcionarioModel;
 
-        return cadastro.updateEndereco(updateCadastro, conexao).then(success => {
+        return cadastro.updateFuncionario(updateCadastro, conexao).then(success => {
             if(success.affectedRows === 0){
                 return response.send({message:'Cadastro inexistente!'});
             }
