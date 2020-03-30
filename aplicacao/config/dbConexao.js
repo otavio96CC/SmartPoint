@@ -1,8 +1,23 @@
 var mysql = require('mysql');
+// let Sequelize = require('sequelize');
 
+// let sequelize = new Sequelize(
+// 	'sitema_de_ponto', 
+// 	'root',
+// 	'vidaloka12',
+// 	{
+// 		host : 'localhost',
+// 		dialect: 'mysql'
+// 	}
+// );
+// sequelize.authenticate().then(()=>{
+// 	console.log("Conexao com o banco de dados feita com sucesso!");
+// }).catch((erro)=>{
+// 	console.log("Falha ao se conectar ao banco: "+erro);
+// });
 let db;
 
-var conexaoMySQL = function(){
+let conexaoMySQL = function(){
 
 	if(db){
 		return db;
@@ -22,4 +37,5 @@ var conexaoMySQL = function(){
 module.exports = function () {
 	console.log('O autoload carregou o módulo de conexão com bd');
 	return conexaoMySQL;
+	//return sequelize;
 }

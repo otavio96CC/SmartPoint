@@ -1,6 +1,6 @@
 module.exports = function(aplicacao){
 
-    aplicacao.get('/endereco', (request, response, next)=>{
+    aplicacao.get('/funcionarioRead', (request, response, next)=>{
 
         let conexao = aplicacao.config.dbConexao();
         let cadastro = aplicacao.app.modelos.funcionarioModel;
@@ -8,11 +8,10 @@ module.exports = function(aplicacao){
         return cadastro.getCadastro(conexao).then(success => {
             return response.send({funcionarios: success});
         }).catch(error => {
-            next({erro: error.sqlMessage});
+            next({erro: error.sqlMessage})
         });
     });
-      
-    aplicacao.post('/endereco', (request, response, next)=>{
+    aplicacao.post('/funcionarioCreate', (request, response, next)=>{
         let cadastro = request.body;
 
         let conexao = aplicacao.config.dbConexao();
@@ -62,7 +61,7 @@ module.exports = function(aplicacao){
     });
     aplicacao.get('/pontoRead', (request, response, next)=>{
 
-        let conexao = aplicacao.config.dbConexao();
+        let conexao = aplicacao.config.dbConexao;
         let ponto = aplicacao.app.modelos.pontoModel;
 
         return ponto.getPonto(conexao).then(success => {

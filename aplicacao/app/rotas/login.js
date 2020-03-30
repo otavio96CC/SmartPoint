@@ -7,7 +7,6 @@ module.exports = function(aplicacao){
         let cadastro = aplicacao.app.modelos.funcionarioModel;
 
         return cadastro.login(login, conexao).then(success => { 
-            //passar mais informaçoes
             JWT.sign({
                 userID: success[0].nome_funcionario,
                 userMatricula: success[0].matricula_funcionario,
