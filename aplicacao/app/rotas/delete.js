@@ -1,55 +1,14 @@
 module.exports = function(aplicacao){
-    aplicacao.delete('/cadastroDelete', (request, response, next)=>{
-        let deleteEndereco = request.body;
-        let conexao = aplicacao.config.dbConexao();
-        let cadastro = aplicacao.app.modelos.funcionarioModel;
+    let funcionarioController = aplicacao.app.controllers.funcionariosController;
+    let empresaController = aplicacao.app.controllers.empresaController;
+    let pontoController = aplicacao.app.controllers.pontoController;
+    let ajusteController = aplicacao.app.controllers.ajusteController;
 
-        return cadastro.deleteFuncionario(deleteEndereco, conexao).then(success => {
-            if(success.affectedRows === 0){
-                return response.send({message:'Cadastro inexistente!'});
-            }
-            return response.send({funcionario : success});
-        }).catch( error => {
-            next({erro: error.sqlMessage});
-        });
-    });
-    aplicacao.delete('/empresaDelete',(request, response, next)=>{
-        let deleteEmpresa= request.body;
-        let conexao = aplicacao.config.dbConexao();
-        let cadastro = aplicacao.app.modelos.empresaModel;
+    aplicacao.delete('/cadastroDelete', funcionarioController.deleteFuncionario);
 
-        return cadastro.deleteEmpresa(deleteEmpresa, conexao).then(success => {
-            if(success.affectedRows === 0){
-                return response.send({message:'Cadastro inexistente!'});
-            }
-            return response.send({empresa: success});
-        }).catch(error => {
-            next({erro: error.sqlMessage});
-        });
-    });
-    aplicacao.delete('/pontoDelete',(request, response, next)=>{
-        let deletePonto = request.body;
-        let conexao = aplicacao.config.dbConexao();
-        let ponto = aplicacao.app.modelos.pontoModel;
+    aplicacao.delete('/empresaDelete', empresaController.deleteEmpresa);
+    
+    aplicacao.delete('/pontoDelete', pontoController.deletePonto);
 
-        return ponto.deletePonto(deletePonto, conexao).then(success => {
-            if(success.affectedRows === 0){
-                return response.send({message:'Ponto inexistente!'});
-            }
-            return response.send({empresa: success});
-        }).catch(error => {
-            next({erro: error.sqlMessage});
-        });
-    });
-    aplicacao.delete('/ajusteDelete', (request, response, next)=>{
-        let deleteAjuste = request.body;
-        let conexao = aplicacao.config.dbConexao();
-        let ajuste= aplicacao.app.modelos.ajusteModel;
-
-        return ajuste.deleteAjuste(deleteAjuste, conexao).then(success => {
-            return response.send({ajuste: success});
-        }).catch(error => {
-            next({erro: error.sqlMessage});
-        });
-    });
+    aplicacao.delete('/ajusteDelete', ajusteController.deleteAjuste);
 }

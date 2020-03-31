@@ -16,9 +16,10 @@ app.set('view engine', 'ejs');
 app.set('views', './app/views')
 
 consign()
-    .include('app/rotas')
-    .then('config/dbConexao.js')
-    .then('app/modelos')
+    .include('util/config.js')
+    .then('app/modelos/index.js')
+    .then('app/controllers')
+    .then('app/rotas')
     .into(app)
 
 app.use(function(err, req, res, next) {
