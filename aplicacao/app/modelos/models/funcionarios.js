@@ -54,6 +54,14 @@ module.exports = function(sequelize, DataTypes) {
 				model: 'enderecos',
 				key: 'id_endereco'
 			}
+		},
+		createdAt: {
+			type: DataTypes.DATE,
+			allowNull: true
+		},
+		updatedAt: {
+			type: DataTypes.DATE,
+			allowNull: true
 		}
 	}, {
 		tableName: 'funcionarios'

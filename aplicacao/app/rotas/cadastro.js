@@ -15,4 +15,6 @@ module.exports = function(aplicacao){
 
     aplicacao.post('/ajusteCreate', ajusteController.setAjuste);
     aplicacao.get('/ajusteRead',ajusteController.getAjuste);
+
+    aplicacao.get('/teste', funcionarioController.teste);
 }

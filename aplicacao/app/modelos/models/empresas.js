@@ -33,6 +33,14 @@ module.exports = function(sequelize, DataTypes) {
 			type: DataTypes.ENUM('Ativo','Inativo'),
 			allowNull: false,
 			defaultValue: 'Ativo'
+		},
+		createdAt: {
+			type: DataTypes.DATE,
+			allowNull: true
+		},
+		updatedAt: {
+			type: DataTypes.DATE,
+			allowNull: true
 		}
 	}, {
 		tableName: 'empresas'

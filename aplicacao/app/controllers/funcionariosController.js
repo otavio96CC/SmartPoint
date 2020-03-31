@@ -54,5 +54,17 @@ module.exports = function(aplicacao){
             next({erro: error.sqlMessage});
         });
     }
+
+    this.teste = (request, response, next)=>{
+        let models = aplicacao.app.modelos.index;
+        let db = models().db;
+        console.log(db);
+        db.funcionarios.findAll().then(success => {
+            response.send({funcionarios: success});
+        }).catch(error => {
+            next(error);
+        });
+        
+    }
     return this;
 }

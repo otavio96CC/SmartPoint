@@ -26,7 +26,16 @@ module.exports = function(sequelize, DataTypes) {
 		},
 		status: {
 			type: DataTypes.ENUM('Ativo','Inativo'),
-			allowNull: false
+			allowNull: false,
+			defaultValue: 'Ativo'
+		},
+		createdAt: {
+			type: DataTypes.DATE,
+			allowNull: true
+		},
+		updatedAt: {
+			type: DataTypes.DATE,
+			allowNull: true
 		}
 	}, {
 		tableName: 'pontos'
