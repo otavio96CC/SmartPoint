@@ -19,11 +19,13 @@
     "uuid": "^7.0.2"
   },
   "devDependencies": {
+    "sequelize-auto": "^0.4.29",
     "gulp-jshint": "^2.1.0",
     "jshint": "^2.11.0"
   },
   "scripts": {
     "start": "gulp develop",
+    "model": "node ./util/baseToModel.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "",
