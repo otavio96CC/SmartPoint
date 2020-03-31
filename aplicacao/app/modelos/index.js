@@ -6,12 +6,12 @@ module.exports = function(aplicacao){
     if(!db){
         
         db = {};
-        let config = aplicacao.util.config.config;
-        console.log(config);
+        let config = aplicacao.util.config.config.database;
+        
         const sequelize = new Sequelize(config.database, config.username, config.password, {
             host: config.host,
             dialect: config.dialect,
-            operatorsAliases: config.operatorsAliases,
+            //operatorsAliases: config.operatorsAliases,
             logging: config.logging,
             pool: config.pool
         });

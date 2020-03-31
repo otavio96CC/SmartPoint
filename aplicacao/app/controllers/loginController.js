@@ -6,10 +6,9 @@ module.exports = function(aplicacao){
         let login = request.body;
         let conexao = aplicacao.config.dbConexao();
         let cadastro = aplicacao.app.modelos.funcionarioModel;
-        let JWTSECRET = aplicacao.util.config.config;
-        let secret = aplicacao.util.config.config;
+        let secrets = aplicacao.util.config.config;
 
-        let hash = crypto.createHmac('sha256', secret[server].secret).update(login.senha).digest('base64');
+        let hash = crypto.createHmac('sha256', secrets['server'].secret).update(login.senha).digest('base64');
         login.senha = hash;
 
         return cadastro.login(login, conexao).then(success => { 
@@ -19,7 +18,7 @@ module.exports = function(aplicacao){
                 userCPF: success[0].cpf_funcionario,
                 userPermissao: success[0].permissao_funcionario,
                 exp: Math.floor(Date.now() / 1000) + 3600
-            }, JWTSECRET[server].jwtSecret, {algorithm: 'HS256'}, (error, token)=>{
+            }, secrets['server'].jwtSecret, {algorithm: 'HS256'}, (error, token)=>{
                 if(error){
                     throw error;
                 }
@@ -33,4 +32,5 @@ module.exports = function(aplicacao){
             next(error);
         });
     }
+    return this;
 }
